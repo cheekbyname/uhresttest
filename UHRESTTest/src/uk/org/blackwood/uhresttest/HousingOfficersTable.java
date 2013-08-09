@@ -12,10 +12,10 @@ public class HousingOfficersTable {
 	public static final String COLUMN_HOUSING_OFFICERS_LU_DESC = "lu_desc";
 
 	private static final String CREATE_HOUSING_OFFICERS=
-			"CREATE TABLE "+TABLE_HOUSING_OFFICERS+"("
-			+COLUMN_ID+COLUMN_ID_DEFAULTS+", "
-			+COLUMN_HOUSING_OFFICERS_LU_REF+COLUMN_TEXT_DEFAULTS+", "
-			+COLUMN_HOUSING_OFFICERS_LU_DESC+COLUMN_TEXT_DEFAULTS+");";
+			"CREATE TABLE " + TABLE_HOUSING_OFFICERS + "("
+			+ COLUMN_ID + COLUMN_ID_DEFAULTS + ", "
+			+ COLUMN_HOUSING_OFFICERS_LU_REF + COLUMN_TEXT_DEFAULTS + ", "
+			+ COLUMN_HOUSING_OFFICERS_LU_DESC + COLUMN_TEXT_DEFAULTS + ");";
 
 	public static void onCreate(SQLiteDatabase db) {
 		// Create Tables
@@ -28,6 +28,6 @@ public class HousingOfficersTable {
 			+ newVer + ", which will destroy all old data");
 		db.execSQL("DROP TABLE IF EXISTS " + TABLE_HOUSING_OFFICERS);
 		onCreate(db);
-		// TODO Pull down data into local reference tables
+		// TODO Request Sync
 	}
 }

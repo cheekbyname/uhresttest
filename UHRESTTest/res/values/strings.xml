@@ -2,17 +2,24 @@
 <resources>
 
     <string name="app_name">UH REST Test</string>
+    <string name="app_admin">enforce security policies on your device</string>
     <string name="action_settings">Settings</string>
+    <string name="action_search">Search</string>
+    <string name="action_filter">Filter</string>
     <string name="hello_world">Welcome to the Blackwood Business Solutions UH REST API test suite</string>
 	<string name="con_status_label">Connection Status:</string>
 	<string name="con_status">Preparing&#8230;</string>
 	<string name="url_spin_prompt">Select a URL to fetch</string>
-	<string name="base_url">http://192.168.121.176:3000</string>
+	<string name="auth_label">Blackwood Business Solutions</string>
+	<string name="base_url">http://192.168.121.176:3000/api</string>
 	<string-array name="test_urls">
-	    <item>http://192.168.121.176:3000/</item>
+	    <item>http://192.168.121.176:3000/api</item>
 	    <item>http://192.168.121.176:3000/housing/officers</item>
 	    <item>http://192.168.121.176:3000/housing/schemes</item>
 	    <item>http://192.168.121.176:3000/housing/tenants/scheme/ABBCTEH</item>
+	    <item>http://192.168.121.176:3000/housing/tenants/officer/AD2</item>
 	</string-array>
+	<string name="tenant_main_activity_title">Tenant Details</string>
+	<string name="search_hint">Search tenants and properties</string>
 	
 </resources>
