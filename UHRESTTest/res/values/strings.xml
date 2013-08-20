@@ -20,6 +20,26 @@
 	    <item>http://192.168.121.176:3000/housing/tenants/officer/AD2</item>
 	</string-array>
 	<string name="tenant_main_activity_title">Tenant Details</string>
+	<string name="tenant_comms_activity_title">Comms Preferences</string>
 	<string name="search_hint">Search tenants and properties</string>
+	
+	<!-- Field labels for tenant information activities -->
+	<string name="tenant_title">Title</string>
+	<string name="tenant_forename">Forename</string>
+	<string name="tenant_surname">Surname</string>
+	<string name="tenant_houseno">House Number</string>
+	<string name="tenant_postcode">Postcode</string>
+	<string name="tenant_houseref">Household Reference</string>
+	<string name="tenant_agreeref">Agreement Reference</string>
+	<string name="tenant_propref">Property Reference</string>
+	<string name="tenant_dob">Date of Birth</string>
+	<string name="tenant_nino">National Insurance Number</string>
+	<string name="tenant_landphones">Landline Phone Numbers</string>
+	<string name="tenant_mobilephones">Mobile Phone Numbers</string>
+	<string name="tenant_emails">Email Addresses</string>
+	<string name="tenant_commstype">Type</string>
+	<string name="tenant_commsvalue">Value</string>
+	<string name="tenant_commsdesc">Description</string>
+	<string name="tenant_commsname">Name</string>
 	
 </resources>

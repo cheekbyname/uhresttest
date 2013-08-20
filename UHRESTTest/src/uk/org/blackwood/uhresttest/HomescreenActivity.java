@@ -36,6 +36,7 @@ public class HomescreenActivity extends Activity
 
     public static final String SCHEME = "content://";
 	public static final String AUTHORITY = "uk.org.blackwood.uhresttest.contentprovider";
+	public static final String EXTRA_TENANT = "uk.org.blackwood.uhresttest.TENANT";
 	// If using an Exchange account
 	public static final String EXCHANGE_ACCOUNT_NAME = "AlexC@mbha.org.uk";
 	public static final String EXCHANGE_ACCOUNT_TYPE = "com.android.exchange";
@@ -71,7 +72,7 @@ public class HomescreenActivity extends Activity
         myUri = new Uri.Builder()
         	.scheme(SCHEME)
         	.authority(AUTHORITY)
-        	.path("uhresttest/Housing/Tenants")
+        	.path("/Housing/Tenants")
         	.build();
         watcher = new DataObserver(new Handler());
         myResolve.registerContentObserver(myUri, true, watcher);
@@ -111,7 +112,9 @@ public class HomescreenActivity extends Activity
     	mTntGrid.setOnItemClickListener(this);
     }
 
+    @Override
     protected void onDestroy() {
+    	super.onDestroy();
     	myResolve.unregisterContentObserver(watcher);
     }
     
@@ -134,7 +137,6 @@ public class HomescreenActivity extends Activity
     public boolean onOptionsItemSelected(MenuItem item) {
     	switch (item.getItemId()) {
     		case R.id.action_search:
-    			// TODO Search addresses, tenants, property and tenancy references
     			return false;
     		case R.id.action_settings:
     			// TODO Main settings menu
@@ -146,7 +148,9 @@ public class HomescreenActivity extends Activity
     
     @Override
 	public void onItemClick(AdapterView<?> parent, View view, int pos, long id) {
-		// TODO Start TenantMainActivity
+		Intent intent = new Intent(this, TenantMainActivity.class);
+		intent.putExtra(EXTRA_TENANT, id);
+		startActivity(intent);
 		Log.d(parent.toString(), "Item selected from " + view.toString() + ": Item at position " + pos);
 		return;
 	}
@@ -226,6 +230,7 @@ public class HomescreenActivity extends Activity
 
 	@Override
 	public boolean onQueryTextSubmit(String searchText) {
+		invalidateOptionsMenu();
 		return true;
 	}
 
