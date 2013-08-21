@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/grid_height"
+    android:background="@color/grid_back"
+    android:orientation="vertical" >
+
+    <LinearLayout 
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <TextView android:id="@+id/forename"
+    		android:layout_width="wrap_content"
+    		android:layout_height="wrap_content" 
+    		android:textSize="@dimen/text_large"
+    		android:textStyle="bold"
+    		android:paddingTop="8dp" />
+        
+        <TextView android:id="@+id/surname"
+    		android:layout_width="wrap_content"
+    		android:layout_height="wrap_content" 
+    		android:textSize="@dimen/text_large"
+    		android:textStyle="bold"
+    		android:paddingLeft="8dp" />
+
+	</LinearLayout>
+
+    <LinearLayout 
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+<!--     
+        <TextView android:id="@+id/house_no"
+    		android:layout_width="wrap_content"
+    		android:layout_height="wrap_content"
+    		android:textSize="@dimen/text_large" />
+-->    
+        <TextView android:id="@+id/address"
+    		android:layout_width="wrap_content"
+    		android:layout_height="wrap_content"
+    		android:textSize="@dimen/text_large"
+    		android:paddingLeft="8dp" />
+	</LinearLayout>
+    
+</LinearLayout>

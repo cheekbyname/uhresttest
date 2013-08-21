@@ -1,12 +1,12 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/LinearLayout1"
-    android:layout_width="fill_parent"
+    android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:paddingBottom="@dimen/activity_vertical_margin"
-    android:paddingLeft="@dimen/activity_horizontal_margin"
-    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingLeft="32dp"
+    android:paddingRight="32dp"
     android:paddingTop="@dimen/activity_vertical_margin"
     android:scrollbarAlwaysDrawVerticalTrack="true"
     android:scrollbarStyle="insideInset"
@@ -14,7 +14,7 @@
     tools:context=".HomescreenActivity" >
 
     <TextView
-        android:id="@+id/textView1"
+        android:id="@+id/lbTntAgreeRef"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/hello_world"
@@ -23,7 +23,8 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" >
+        android:layout_height="wrap_content"
+        android:orientation="horizontal" >
 
         <TextView
             android:id="@+id/textView2"
@@ -38,42 +39,21 @@
             android:layout_height="wrap_content"
             android:text="@string/con_status"
             android:textSize="@dimen/text_large" />
-
     </LinearLayout>
 
-    <Spinner
-        android:id="@+id/spinTestUrls"
-        style="@layout/spinner_row"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:animateLayoutChanges="true"
-        android:entries="@array/test_urls"
-        android:gravity="top"
-        android:prompt="@string/url_spin_prompt"
-        android:textSize="@dimen/text_large" >
-
-    </Spinner>
-
     <GridView
-        android:id="@+id/gridView1"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:id="@+id/tenant_grid"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:columnWidth="@dimen/grid_width"
+        android:gravity="top|left"
+        android:horizontalSpacing="@dimen/grid_spacing"
         android:numColumns="auto_fit"
         android:scrollbars="vertical|horizontal"
-        android:gravity="top|left" >
+        android:stretchMode="columnWidth"
+        android:verticalSpacing="@dimen/grid_spacing"
+        tools:listitem="@android:layout/simple_list_item_2" >
 
     </GridView>
-
-    <ScrollView
-        android:id="@+id/scrollView1"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" >
-
-        <TextView
-            android:id="@+id/textViewUrlReturn"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textAppearance="?android:attr/textAppearanceLarge" />
-    </ScrollView>
 
 </LinearLayout>
