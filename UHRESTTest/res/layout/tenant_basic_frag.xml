@@ -1,0 +1,182 @@
+<?xml version="1.0" encoding="utf-8"?>
+<TableLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/tntFormBasicFrame"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_margin="@dimen/grid_spacing" >
+
+    <TableRow
+        android:id="@+id/rwTntTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" >
+
+        <TextView
+            android:id="@+id/lbTntTitle"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/tenant_title"
+            android:textAppearance="?android:attr/textAppearanceLarge" />
+
+        <EditText
+            android:id="@+id/edTntTitle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/tenant_title"
+            android:inputType="textCapWords" >
+        </EditText>
+    </TableRow>
+
+    <TableRow
+        android:id="@+id/rwTntForename"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" >
+
+        <TextView
+            android:id="@+id/lbTntForename"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/tenant_forename"
+            android:textAppearance="?android:attr/textAppearanceLarge" />
+
+        <EditText
+            android:id="@+id/edTntForename"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/tenant_forename"
+            android:inputType="textPersonName" />
+    </TableRow>
+
+    <TableRow
+        android:id="@+id/rwTntSurname"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" >
+
+        <TextView
+            android:id="@+id/lbTntSurname"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/tenant_surname"
+            android:textAppearance="?android:attr/textAppearanceLarge" />
+
+        <EditText
+            android:id="@+id/edTntSurname"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/tenant_surname"
+            android:inputType="textPersonName" />
+    </TableRow>
+
+    <TableRow
+        android:id="@+id/rwTntDob"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" >
+
+        <TextView
+            android:id="@+id/lbTntDob"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/tenant_dob"
+            android:textAppearance="?android:attr/textAppearanceLarge" />
+
+        <EditText
+            android:id="@+id/edTntDob"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:hint="@string/tenant_dob"
+            android:inputType="date" >
+
+            <requestFocus />
+
+        </EditText>
+
+    </TableRow>
+
+    <TableRow
+        android:id="@+id/rwTntNino"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" >
+
+        <TextView
+            android:id="@+id/lbTntNino"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/tenant_nino"
+            android:textAppearance="?android:attr/textAppearanceLarge" />
+
+        <EditText
+            android:id="@+id/edTntNino"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:hint="@string/tenant_nino"
+            android:inputType="textCapCharacters" />
+
+    </TableRow>
+
+    <TableRow
+        android:id="@+id/rwTntAgreeRef"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" >
+
+        <TextView
+            android:id="@+id/lbTntAgreeRef"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/tenant_agreeref"
+            android:textAppearance="?android:attr/textAppearanceLarge" />
+
+        <EditText
+            android:id="@+id/edTntAgreeRef"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:hint="@string/tenant_agreeref"
+            android:inputType="textCapCharacters" />
+
+    </TableRow>
+
+    <TableRow
+        android:id="@+id/rwTntPropRef"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" >
+
+        <TextView
+            android:id="@+id/lbTntPropRef"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/tenant_propref"
+            android:textAppearance="?android:attr/textAppearanceLarge" />
+
+        <EditText
+            android:id="@+id/edTntPropRef"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:hint="@string/tenant_propref" />
+
+    </TableRow>
+
+    <TableRow
+        android:id="@+id/rwTntHouseRef"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" >
+
+        <TextView
+            android:id="@+id/lbTntHouseRef"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/tenant_houseref"
+            android:textAppearance="?android:attr/textAppearanceLarge" />
+
+        <EditText
+            android:id="@+id/edHouseRef"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:hint="@string/tenant_houseref"
+            android:inputType="textCapCharacters" />
+
+    </TableRow>
+
+</TableLayout>
