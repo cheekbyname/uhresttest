@@ -16,111 +16,120 @@ import android.accounts.Account;
 import android.content.AbstractThreadedSyncAdapter;
 import android.content.ContentProviderClient;
 import android.content.ContentResolver;
+import android.content.ContentValues;
 import android.content.Context;
 import android.content.SyncResult;
-import android.database.sqlite.SQLiteDatabase;
-import android.database.sqlite.SQLiteStatement;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 
 public class SyncAdapt extends AbstractThreadedSyncAdapter {
 	
 	public static final String API_BASE = "http://192.168.121.176:3000";
+    public static final String SCHEME = "content";
+	public static final String AUTHORITY = "uk.org.blackwood.uhresttest.contentprovider";
+	public static final String DATA_PATH = "uhresttest";
+	
+	// Custom argBundle parameters
+	public static final String SYNCADAPT_TABLES = "syncadapt_tables";
+	public static final String SYNCADAPT_APIS = "syncadapt_apis";
+	public static final String SYNCADAPT_KEYS = "syncadapt_keys";
+	public static final String SYNCADAPT_SCOPES = "syncadapt_scopes";
+	public static final int SYNCADAPTSCOPE_ALL = 0;
+	public static final int SYNCADAPTSCOPE_SINGLE = 1;
+	public static final int SYNCADAPTSCOPE_KEYED = 2;
+	public static final String SYNCADAPT_KEYTYPES = "syncadapt_keytypes";
+	public static final int SYNCADAPTKEYTYPE_STRING = 0;
+	public static final int SYNCADAPTKEYTYPE_INT = 1;
+	public static final String SYNCADAPT_METHODS = "syncadapt_methods";
+	public static final int SYNCADAPTMETHOD_DELETE = 0;
+	public static final int SYNCADAPTMETHOD_GET = 1;
+	public static final int SYNCADAPTMETHOD_PUT = 2;
+	public static final int SYNCADAPTMETHOD_POST = 3;
 	
 	public ContentResolver myContentResolve;
-	private UHRESTTestHelper dbHelp;
-	private SQLiteDatabase db;
 
 	public SyncAdapt(Context context, boolean autoInitialize) {
 		super(context, autoInitialize);
 		myContentResolve = context.getContentResolver();
-		dbHelp = new UHRESTTestHelper(getContext());
-		db = dbHelp.getWritableDatabase();
 	}
 
 	public SyncAdapt(Context context, boolean autoInitialize,
 			boolean allowParallelSyncs) {
 		super(context, autoInitialize, allowParallelSyncs);
 		myContentResolve = context.getContentResolver();
-		dbHelp = new UHRESTTestHelper(getContext());
-		db = dbHelp.getWritableDatabase();
 	}
 
 	@Override
-	public void onPerformSync(Account account, Bundle extras, String authority,
+	public void onPerformSync(Account account, Bundle argBundle, String authority,
 			ContentProviderClient provider, SyncResult syncResult) {
+
+		// Extract argBundle parameters
+		String syncTables = argBundle.getString(SYNCADAPT_TABLES);
+		String syncApis = argBundle.getString(SYNCADAPT_APIS);
+		String syncKeys = argBundle.getString(SYNCADAPT_KEYS);
+		int syncScopes = argBundle.getInt(SYNCADAPT_SCOPES);
+		int syncKeyTypes = argBundle.getInt(SYNCADAPT_KEYTYPES);
+		int syncMethods = argBundle.getInt(SYNCADAPT_METHODS);
 		
-		// TODO Download - How are we going to identify which tables need updated?
-		try {
-			jsonToTable(HousingTenantsTable.TABLE_HOUSING_TENANTS, 
-				FetchData(API_BASE + HousingTenantsTable.API_PATH + "AD2"));	// TODO - Replace explicit Officer reference
-		} catch (MalformedURLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+		if (syncApis != null) {
+			try {
+		        Uri myUri = new Uri.Builder()
+	        	.scheme(SCHEME)
+	        	.authority(AUTHORITY)
+	        	.path(DATA_PATH + syncTables)
+	        	.build();
+				int rowsUpdated = jsonToContent(myUri, FetchData(API_BASE + syncApis + syncKeys));
+				Log.i("SyncAdapt", "Executed " + String.valueOf(rowsUpdated) + " inserts on " + myUri);
+			} catch (MalformedURLException e) {
+				e.printStackTrace();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
 		}
+
 		// TODO Upload
 		// TODO Conflicts
 		// TODO Other non-data network tasks
 		// TODO Cleanup
+
 	}
 
-	// Parse JSONArray into Table
-	private void jsonToTable(String table, JSONArray jsonData) {
+	private int jsonToContent (Uri uri, JSONArray jsonData) {
+		
+		JSONObject jObj = null; 
+		ContentValues dataRow = null;
+		ContentValues [] dataSet = new ContentValues[jsonData.length()];
 
-		// Build & compile SQL statement
-		String strSql = "INSERT INTO " + table + " ";
-		JSONObject jObj = null;
-		// Pull first row for column heads
 		try {
+			// Pull first row for column names
 			jObj = jsonData.getJSONObject(0);
-		} catch (JSONException e1) {
-			e1.printStackTrace();
-			return;
-		}
-		JSONArray jNames = jObj.names();
-		strSql = strSql + jNames.toString();
-		strSql = strSql.replace("[", "(").replace("]", ")").replace("\"", "");
-		strSql = strSql + " VALUES (";
-		for (int i = 0; i < jNames.length(); i++) {
-			strSql = strSql.concat("?, ");
-		}
-		strSql = strSql.substring(0, strSql.length()-2);
-		strSql = strSql + ");";
-		Log.d("SyncAdapt", strSql);
+			JSONArray jNames = jObj.names();
 
-		db.beginTransaction();
-		SQLiteStatement sqlInsert = db.compileStatement(strSql);
-
-		// TODO Start of Transaction try block
-		// Iterate rows
-		for (int i = 0; i < jsonData.length(); i++) {
-			sqlInsert.clearBindings();
-			try {
+			for (int i=0; i<jsonData.length(); i++) {
+				dataRow = new ContentValues();
 				jObj = jsonData.getJSONObject(i);
-				// Iterate columns and bind parameterized values
-				for (int j = 0; j < jNames.length(); j++) {
+				for (int j=0; j<jNames.length(); j++) {
 					Object obJson = jObj.get(jNames.getString(j));
 					if (obJson instanceof String) {
-						sqlInsert.bindString(j + 1, jObj.getString(jNames.getString(j)));
-					} else { 
-						sqlInsert.bindLong(j + 1, jObj.getLong(jNames.getString(j)));
+						dataRow.put(jNames.getString(j), (String) obJson);
+					} else if (obJson instanceof Integer) {
+						dataRow.put(jNames.getString(j), (Integer) obJson);
+					} else {
+						dataRow.put(jNames.getString(j), (Long) obJson);
 					}
 				}
-			} catch (JSONException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} 
-			sqlInsert.executeInsert();
+				dataSet[i] = dataRow;
+			}
+			return myContentResolve.bulkInsert(uri, dataSet);
+
+		} catch (JSONException e) {
+			e.printStackTrace();
+			return -1;
 		}
-		db.setTransactionSuccessful(); // TODO End of Transaction try block
-		db.endTransaction();	// TODO Finally...
 	}
 
 	private JSONArray FetchData(String strUrl) throws MalformedURLException, IOException {
-//		Log.d("SyncAdapt", strUrl);	// TODO DEBUG
 		InputStream isReturn = null;
 		String strContent = null;
 		JSONArray jsRes = null;
@@ -135,19 +144,16 @@ public class SyncAdapt extends AbstractThreadedSyncAdapter {
 			conn.connect();
 			isReturn = conn.getInputStream();
 			strContent = readStream(isReturn);
-//			Log.d("SyncAdapt", strContent);	// TODO DEBUG
 		} catch (MalformedURLException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} finally {
 			if (isReturn != null) {
 				isReturn.close();
 			}
 		}
-		try {	// TODO Remove this when moving to GSON
+		try {
 			jsRes = new JSONArray(strContent);
 		} catch (JSONException e) {
 			e.printStackTrace();

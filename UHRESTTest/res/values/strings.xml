@@ -24,6 +24,7 @@
 	<string name="search_hint">Search tenants and properties</string>
 	
 	<!-- Field labels for tenant information activities -->
+	<!--  Tenant Basic Fragment -->
 	<string name="tenant_title">Title</string>
 	<string name="tenant_forename">Forename</string>
 	<string name="tenant_surname">Surname</string>
@@ -37,9 +38,10 @@
 	<string name="tenant_landphones">Landline Phone Numbers</string>
 	<string name="tenant_mobilephones">Mobile Phone Numbers</string>
 	<string name="tenant_emails">Email Addresses</string>
+	<!-- Tenant Comms Fragment -->
 	<string name="tenant_commstype">Type</string>
 	<string name="tenant_commsvalue">Value</string>
 	<string name="tenant_commsdesc">Description</string>
 	<string name="tenant_commsname">Name</string>
-	
+
 </resources>

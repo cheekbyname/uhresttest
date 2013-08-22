@@ -1,6 +1,5 @@
 package uk.org.blackwood.uhresttest;
 
-import android.content.ContentResolver;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 
@@ -12,7 +11,8 @@ public class HousingTenantsTable {
 	public static final String COLUMN_INT_DEFAULTS = " INTEGER ";
 	public static final String COLUMN_SEPARATOR = ", ";
 	public static final String TABLE_HOUSING_TENANTS = "housing_tenants";
-	public static final String API_PATH = "/housing/tenants/officer/";
+	public static final String CONTENT_PATH = "/housing/tenants/";
+	public static final String API_PATH = CONTENT_PATH + "officer/";
 
 	// Columns
 	public static final String COLUMN_HOUSING_TENANTS_TAG_REF = "tag_ref";
@@ -37,7 +37,7 @@ public class HousingTenantsTable {
 	// Projections
 	public static final String [] PROJECTION_HOUSING_TENANTS_SUMMARY = {COLUMN_ID, COLUMN_HOUSING_TENANTS_TITLE,
 		COLUMN_HOUSING_TENANTS_FORENAME, COLUMN_HOUSING_TENANTS_SURNAME, COLUMN_HOUSING_TENANTS_POST_DESIG, COLUMN_HOUSING_TENANTS_ADDRESS,
-		COLUMN_HOUSING_TENANTS_CHECK_DETAILS, COLUMN_HOUSING_TENANTS_POST_CODE};
+		COLUMN_HOUSING_TENANTS_CHECK_DETAILS, COLUMN_HOUSING_TENANTS_POST_CODE, COLUMN_HOUSING_TENANTS_CON_KEY};
 	public static final String [] PROJECTION_HOUSING_TENANTS_ALL = {COLUMN_ID, COLUMN_HOUSING_TENANTS_TAG_REF,
 		COLUMN_HOUSING_TENANTS_SURNAME, COLUMN_HOUSING_TENANTS_FORENAME, COLUMN_HOUSING_TENANTS_TITLE,
 		COLUMN_HOUSING_TENANTS_POST_DESIG, COLUMN_HOUSING_TENANTS_ADDRESS, COLUMN_HOUSING_TENANTS_SCHEME_REF,
@@ -70,6 +70,7 @@ public class HousingTenantsTable {
 		+ COLUMN_HOUSING_TENANTS_POST_CODE + COLUMN_TEXT_DEFAULTS + ");";
 	
 	public static void onCreate(SQLiteDatabase db) {
+		Log.d("HousingTenantsTable", "Executing " + CREATE_TENANTS);
 		db.execSQL(CREATE_TENANTS);
 	}
 	
@@ -79,6 +80,5 @@ public class HousingTenantsTable {
 			+ newVer + " which will destroy all old data");
 		db.execSQL("DROP TABLE IF EXISTS " + TABLE_HOUSING_TENANTS);
 		onCreate(db);
-		ContentResolver.requestSync(HomescreenActivity.exAcct, HomescreenActivity.AUTHORITY, null);
 	}
 }
