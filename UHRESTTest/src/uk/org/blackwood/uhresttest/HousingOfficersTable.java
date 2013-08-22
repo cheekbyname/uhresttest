@@ -19,6 +19,7 @@ public class HousingOfficersTable {
 
 	public static void onCreate(SQLiteDatabase db) {
 		// Create Tables
+		Log.d("HousingOfficersTable", "Executing " + CREATE_HOUSING_OFFICERS);
 		db.execSQL(CREATE_HOUSING_OFFICERS);
 	}
 

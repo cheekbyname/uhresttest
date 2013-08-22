@@ -34,8 +34,9 @@ import uk.org.blackwood.uhresttest.contentprovider.UHRESTTestContentProvider;
 public class HomescreenActivity extends Activity 
 	implements OnItemClickListener, LoaderManager.LoaderCallbacks<Cursor>, OnQueryTextListener {
 
-    public static final String SCHEME = "content://";
+    public static final String SCHEME = "content";
 	public static final String AUTHORITY = "uk.org.blackwood.uhresttest.contentprovider";
+	public static final String PATH = "uhresttest/Housing/Tenants";
 	public static final String EXTRA_TENANT = "uk.org.blackwood.uhresttest.TENANT";
 	// If using an Exchange account
 	public static final String EXCHANGE_ACCOUNT_NAME = "AlexC@mbha.org.uk";
@@ -49,7 +50,7 @@ public class HomescreenActivity extends Activity
     ContentResolver myResolve;
     public static Account exAcct;
     private SimpleCursorAdapter cAdapt;
-    DataObserver watcher = null;
+//    DataObserver watcher = null;
     AccountManager am = null;
     String curSearch = null;
  
@@ -66,17 +67,18 @@ public class HomescreenActivity extends Activity
         if (Intent.ACTION_SEARCH.equals(intent.getAction())) {
         	curSearch = intent.getStringExtra(SearchManager.QUERY);
         }
-        
+/*        
         // Instantiate Observer for Data Syncing of housing_tenants table
         myResolve = getContentResolver();
         myUri = new Uri.Builder()
         	.scheme(SCHEME)
         	.authority(AUTHORITY)
-        	.path("/Housing/Tenants")
+        	.path(PATH)
         	.build();
-        watcher = new DataObserver(new Handler());
+        DataObserver watcher = new DataObserver(new Handler());
+        Log.d("HomescreenActivity", "Registering ContentObserver for " + myUri);
         myResolve.registerContentObserver(myUri, true, watcher);
-
+*/
         // Dummy account for emulator debugging
 		am = AccountManager.get(getApplicationContext());
 		Account newAcct = new Account(ACCOUNT, ACCOUNT_TYPE);
@@ -94,7 +96,6 @@ public class HomescreenActivity extends Activity
         	tvConStatus.setText("No network connection, only local data available");
     	};
     	
-    	
     	// Plug data into GridView
     	getLoaderManager().initLoader(0, null, this);
     	cAdapt = new SimpleCursorAdapter(
@@ -111,11 +112,26 @@ public class HomescreenActivity extends Activity
     	mTntGrid.setAdapter(cAdapt);
     	mTntGrid.setOnItemClickListener(this);
     }
+/*
+    @Override
+    protected void onPause() {
+    	super.onPause();
+    	myResolve.unregisterContentObserver(watcher);
+    }
+    
+    @Override
+    protected void onResume() {
+    	super.onResume();
+    	if (watcher != null) {
+    		myResolve.registerContentObserver(myUri, true, watcher);
+    	}
+    }
+*/
 
     @Override
-    protected void onDestroy() {
+    public void onDestroy() {
     	super.onDestroy();
-    	myResolve.unregisterContentObserver(watcher);
+//    	myResolve.unregisterContentObserver(watcher);
     }
     
     @Override
@@ -154,13 +170,12 @@ public class HomescreenActivity extends Activity
 		Log.d(parent.toString(), "Item selected from " + view.toString() + ": Item at position " + pos);
 		return;
 	}
-
-	// Observer for ContentProvider to trigger Sync
+/*
+	// Observer for ContentProvider to trigger redraw
     public class DataObserver extends ContentObserver {
 
 		public DataObserver(Handler handler) {
 			super(handler);
-			// TODO Auto-generated constructor stub
 		}
 
 		@Override
@@ -170,23 +185,21 @@ public class HomescreenActivity extends Activity
 		
 		@Override
 		public void onChange (boolean selfChange, Uri changeUri) {
-			// TODO Retrieve Exchange Account and request sync - Pretty sure this is incorrect as it stands
-			//ContentResolver.requestSync(exAcct, AUTHORITY, null);
 			Log.d("DataObserver", "I totally observed data.");
+			getLoaderManager().restartLoader(0, null, );
 		}
     }
-    
+*/  
 	@Override
-	public Loader<Cursor> onCreateLoader(int id, Bundle args) {
+	public Loader<Cursor> onCreateLoader(int id, Bundle argBundle) {
 		String selection = null;
 		String[] selectArgs = null;
-		if (args != null) {
-			String searchTerm = args.getString("searchTerm");
+		if (argBundle != null) {
+			String searchTerm = argBundle.getString("searchTerm");
 			selection = HousingTenantsTable.COLUMN_HOUSING_TENANTS_FORENAME + " LIKE ? OR "
 				+ HousingTenantsTable.COLUMN_HOUSING_TENANTS_SURNAME + " LIKE ? OR "
 				+ HousingTenantsTable.COLUMN_HOUSING_TENANTS_CHECK_DETAILS + " LIKE ?";
 			selectArgs = new String[] {searchTerm, searchTerm, searchTerm};
-			Log.d("CursorLoader", "I was asked to build a search cursor. But didn't.");
 		}
 		CursorLoader mcLoader = new CursorLoader(
 			this,														// Context
