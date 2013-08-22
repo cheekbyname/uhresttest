@@ -1,10 +1,8 @@
 package uk.org.blackwood.uhresttest;
 
-import android.content.ContentResolver;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
-import android.os.Bundle;
 
 public class UHRESTTestHelper extends SQLiteOpenHelper {
 
@@ -22,11 +20,7 @@ public class UHRESTTestHelper extends SQLiteOpenHelper {
 		HousingSchemesTable.onCreate(db);
 		HousingOfficersTable.onCreate(db);
 		HousingTenantsTable.onCreate(db);
-		// Sync Data
-		Bundle syncSet = new Bundle();
-		syncSet.putBoolean(ContentResolver.SYNC_EXTRAS_MANUAL, true);
-		syncSet.putBoolean(ContentResolver.SYNC_EXTRAS_EXPEDITED, true);
-		ContentResolver.requestSync(HomescreenActivity.exAcct, HomescreenActivity.AUTHORITY, syncSet);
+		HousingTenantsCommsTable.onCreate(db);
 	}
 
 	@Override
@@ -35,10 +29,6 @@ public class UHRESTTestHelper extends SQLiteOpenHelper {
 		HousingSchemesTable.onUpgrade(db, oldVer, newVer);
 		HousingOfficersTable.onUpgrade(db, oldVer, newVer);
 		HousingTenantsTable.onUpgrade(db, oldVer, newVer);
-		// Sync Data
-		Bundle syncSet = new Bundle();
-		syncSet.putBoolean(ContentResolver.SYNC_EXTRAS_MANUAL, true);
-		syncSet.putBoolean(ContentResolver.SYNC_EXTRAS_EXPEDITED, true);
-		ContentResolver.requestSync(HomescreenActivity.exAcct, HomescreenActivity.AUTHORITY, syncSet);
+		HousingTenantsCommsTable.onUpgrade(db, oldVer, newVer);
 	}
 }
