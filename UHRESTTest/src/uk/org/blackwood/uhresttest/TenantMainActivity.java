@@ -56,6 +56,7 @@ public class TenantMainActivity extends FragmentActivity implements TenantHandle
 		outState.putInt("tab", getActionBar().getSelectedNavigationIndex());
 	}
 	
+	@Override
 	public long getTenant_id() {
 		return tenant_id;
 	}

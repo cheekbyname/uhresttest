@@ -15,7 +15,7 @@ public class PolicyAdmin extends DeviceAdminReceiver {
 	public void onDisabled(Context context, Intent intent) {
 		super.onDisabled(context, intent);
 		// TODO Code for data wipe on policy revocation
-		SharedPreferences prefs=context.getSharedPreferences(APP_PREF, Activity.MODE_PRIVATE);
+		SharedPreferences prefs=context.getSharedPreferences(APP_PREF, Context.MODE_PRIVATE);
 		prefs.edit().clear().commit();
 	}
 }

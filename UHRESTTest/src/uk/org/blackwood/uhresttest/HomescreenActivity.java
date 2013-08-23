@@ -1,5 +1,6 @@
 package uk.org.blackwood.uhresttest;
 
+import uk.org.blackwood.uhresttest.contentprovider.UHRESTTestContentProvider;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
@@ -29,7 +30,6 @@ import android.widget.SearchView;
 import android.widget.SearchView.OnQueryTextListener;
 import android.widget.SimpleCursorAdapter;
 import android.widget.TextView;
-import uk.org.blackwood.uhresttest.contentprovider.UHRESTTestContentProvider;
 
 public class HomescreenActivity extends Activity 
 	implements OnItemClickListener, LoaderManager.LoaderCallbacks<Cursor>, OnQueryTextListener {
@@ -152,11 +152,6 @@ public class HomescreenActivity extends Activity
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
     	switch (item.getItemId()) {
-    		case R.id.action_search:
-    			return false;
-    		case R.id.action_settings:
-    			// TODO Main settings menu
-    			return true;
     		default:
     			return super.onOptionsItemSelected(item);
     	}

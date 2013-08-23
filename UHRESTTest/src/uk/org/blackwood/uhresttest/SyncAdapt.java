@@ -133,6 +133,7 @@ public class SyncAdapt extends AbstractThreadedSyncAdapter {
 		InputStream isReturn = null;
 		String strContent = null;
 		JSONArray jsRes = null;
+// TODO Trap no network
 		try {
 			// Connection
 			URL url = new URL(strUrl);
@@ -148,6 +149,7 @@ public class SyncAdapt extends AbstractThreadedSyncAdapter {
 			e.printStackTrace();
 		} catch (IOException e) {
 			e.printStackTrace();
+// TODO Trap connection timeouts
 		} finally {
 			if (isReturn != null) {
 				isReturn.close();

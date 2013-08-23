@@ -16,6 +16,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteConstraintException;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteQueryBuilder;
+import android.database.sqlite.SQLiteStatement;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
@@ -30,16 +31,16 @@ public class UHRESTTestContentProvider extends ContentProvider {
 	private static final String BASE_PATH = "uhresttest/";
 	private static final int HOUSING_OFFICERS = 10;
 	private static final int HOUSING_OFFICERS_ID = 11;
-	private static final String HOUSING_OFFICERS_PATH = "Housing/Officers";
+	private static final String HOUSING_OFFICERS_PATH = "housing/officers";
 	private static final int HOUSING_SCHEMES = 20;
 	private static final int HOUSING_SCHEMES_ID=21;
-	private static final String HOUSING_SCHEMES_PATH = "Housing/Schemes";
+	private static final String HOUSING_SCHEMES_PATH = "housing/schemes";
 	private static final int HOUSING_TENANTS = 30;
 	private static final int HOUSING_TENANTS_ID = 31;
-	private static final String HOUSING_TENANTS_PATH = "Housing/Tenants";
+	private static final String HOUSING_TENANTS_PATH = "housing/tenants";
 	private static final int HOUSING_TENANTS_COMMS = 40;
 	private static final int HOUSING_TENANTS_COMMS_ID = 41;
-	private static final String HOUSING_TENANTS_COMMS_PATH = "Housing/Tenants/Comms";
+	private static final String HOUSING_TENANTS_COMMS_PATH = "housing/tenants/comms";
 
 	// TODO Sort these out, they're wrong?
 	public static final Uri CONTENT_URI = Uri.parse("content://" + AUTHORITY + "/" + BASE_PATH);
@@ -84,15 +85,33 @@ public class UHRESTTestContentProvider extends ContentProvider {
 
 	@Override
 	public String getType(Uri uri) {
-		// TODO Auto-generated method stub
-		return null;
+		switch(myURIMatcher.match(uri)) {
+		case HOUSING_OFFICERS:
+			return CONTENT_TYPE;
+		case HOUSING_OFFICERS_ID:
+			return CONTENT_ITEM_TYPE;
+		case HOUSING_SCHEMES:
+			return CONTENT_TYPE;
+		case HOUSING_SCHEMES_ID:
+			return CONTENT_ITEM_TYPE;
+		case HOUSING_TENANTS:
+			return CONTENT_TYPE;
+		case HOUSING_TENANTS_ID:
+			return CONTENT_ITEM_TYPE;
+		case HOUSING_TENANTS_COMMS:
+			return CONTENT_TYPE;
+		case HOUSING_TENANTS_COMMS_ID:
+			return CONTENT_ITEM_TYPE;
+		default:
+			throw new IllegalArgumentException("Invalid URI for operation: " + uri.toString());
+		}
 	}
 
 	@Override
 	public Uri insert(Uri uri, ContentValues values) {
 		String tableName;
 		int contentUri = myURIMatcher.match(uri);
-		Log.d("ContentProvider", "Attempting insert for " + String.valueOf(contentUri) + ":" + uri.toString());
+//		Log.d("ContentProvider", "Attempting insert for " + String.valueOf(contentUri) + ":" + uri.toString());
 		switch (contentUri) {
 		case HOUSING_TENANTS:
 			tableName = HousingTenantsTable.TABLE_HOUSING_TENANTS;
@@ -123,6 +142,71 @@ public class UHRESTTestContentProvider extends ContentProvider {
 		return null; 
 	}
 
+	@Override
+	public int bulkInsert(Uri uri, ContentValues[] values) {
+		String tableName;
+		int contentUri = myURIMatcher.match(uri);
+		Log.d("ContentProvider", "Attempting insert for " + String.valueOf(contentUri) + ": " + uri.toString());
+		switch (contentUri) {
+		case HOUSING_TENANTS:
+			tableName = HousingTenantsTable.TABLE_HOUSING_TENANTS;
+			break;
+		case HOUSING_TENANTS_COMMS:
+			tableName = HousingTenantsCommsTable.TABLE_HOUSING_TENANTS_COMMS;
+			break;
+		case HOUSING_OFFICERS:
+			tableName = HousingOfficersTable.TABLE_HOUSING_OFFICERS;
+			break;
+		case HOUSING_SCHEMES:
+			tableName = HousingSchemesTable.TABLE_HOUSING_SCHEMES;
+			break;
+		default :
+			throw new IllegalArgumentException("Invalid URI for insert operation: " + uri.toString());
+		}
+
+		// Build INSERT statement
+		String [] cNames = values[0].keySet().toArray(new String[0]);
+		String strSQL = "INSERT INTO " + tableName + " (";
+		for (int i=0; i<cNames.length; i++) {
+			strSQL = strSQL + cNames[i] + ", ";
+		}
+		strSQL = strSQL.substring(0, strSQL.length()-2);
+		strSQL = strSQL + ") VALUES (";
+		for (int i=0; i<cNames.length; i++) {
+			strSQL = strSQL.concat("?, ");
+		}
+		strSQL = strSQL.substring(0, strSQL.length()-2);
+		strSQL = strSQL + ");";
+		
+		// Compile & execute in transaction
+		SQLiteDatabase sqlDB = db.getWritableDatabase();
+		sqlDB.beginTransaction();
+		
+		SQLiteStatement sqlInsert = sqlDB.compileStatement(strSQL);
+		for (int i=0; i<values.length; i++) {
+			sqlInsert.clearBindings();
+			for (int j=0; j<cNames.length; j++) {
+				Object objVal = values[i].get(cNames[j]);
+				if (objVal instanceof String) {
+					sqlInsert.bindString(j+1, (String) objVal);
+				} else if (objVal instanceof Double) {
+					sqlInsert.bindDouble(j+1, (Double) objVal);
+				} else if (objVal instanceof Long) {
+					sqlInsert.bindLong(j+1, (Long) objVal);
+				} else if (objVal instanceof Integer) {
+					sqlInsert.bindLong(j+1, Long.valueOf((Integer) objVal));
+				} else {
+					throw new IllegalArgumentException("Unknown type in Contentvalues: " + objVal.getClass().toString());
+				}
+			}
+			sqlInsert.executeInsert();
+		}
+		sqlDB.setTransactionSuccessful();
+		sqlDB.endTransaction();
+		getContext().getContentResolver().notifyChange(uri, null);
+		return values.length;
+	}
+	
 	@Override
 	public Cursor query(Uri uri, String[] projection, String selection,
 			String[] selectionArgs, String sortOrder) {

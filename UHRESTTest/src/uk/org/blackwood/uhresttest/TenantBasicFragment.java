@@ -27,6 +27,7 @@ public class TenantBasicFragment
 		public long getTenant_id();
 	}
 	
+	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		// Plug in data
     	cAdapt = new SimpleCursorAdapter(
@@ -47,6 +48,7 @@ public class TenantBasicFragment
     	return inflater.inflate(R.layout.tenant_basic_frag, container, false);
 	}
 
+	@Override
 	public void onActivityCreated(Bundle savedInstanceState) {
 		super.onActivityCreated(savedInstanceState);
 		Bundle argBundle = new Bundle();
