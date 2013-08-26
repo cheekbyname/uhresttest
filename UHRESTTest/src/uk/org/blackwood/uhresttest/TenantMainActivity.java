@@ -2,7 +2,7 @@ package uk.org.blackwood.uhresttest;
 
 import java.util.ArrayList;
 
-import uk.org.blackwood.uhresttest.TenantBasicFragment.TenantHandler;
+import uk.org.blackwood.uhresttest.TenantHandler;
 
 import android.app.ActionBar;
 import android.app.ActionBar.Tab;
@@ -18,17 +18,20 @@ import android.support.v4.app.Fragment;
 public class TenantMainActivity extends FragmentActivity implements TenantHandler {
 	
 	public static final String EXTRA_TENANT = "uk.org.blackwood.uhresttest.TENANT";
+	public static final String EXTRA_CON_KEY = "uk.org.blackwood.uhresttest.CON_KEY";
 	ViewPager mViewPager;
 	TabAdapter mTabAdapt;
 	private long tenant_id;
+	private long tenant_con_key;
 
 	@Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         
-		// Extract Tenant passed in Intent
+		// Extract parameters passed in Intent
 		Intent intent = getIntent();
 		setTenant_id(intent.getLongExtra(EXTRA_TENANT, 0));
+		setTenant_con_key(intent.getLongExtra(EXTRA_CON_KEY, 0));
 		
 		// Setup Views
 		mViewPager = new ViewPager(this);
@@ -55,7 +58,8 @@ public class TenantMainActivity extends FragmentActivity implements TenantHandle
 		super.onSaveInstanceState(outState);
 		outState.putInt("tab", getActionBar().getSelectedNavigationIndex());
 	}
-	
+
+	// TenantHandler Interface methods
 	@Override
 	public long getTenant_id() {
 		return tenant_id;
@@ -63,6 +67,15 @@ public class TenantMainActivity extends FragmentActivity implements TenantHandle
 
 	public void setTenant_id(long tenant_id) {
 		this.tenant_id = tenant_id;
+	}
+
+	@Override
+	public long getTenant_con_key() {
+		return tenant_con_key;
+	}
+	
+	public void setTenant_con_key(long tntConKey) {
+		this.tenant_con_key = tntConKey;
 	}
 
 	public static class TabAdapter
@@ -151,5 +164,5 @@ public class TenantMainActivity extends FragmentActivity implements TenantHandle
 		}
 		
 	}
-	
+
 }

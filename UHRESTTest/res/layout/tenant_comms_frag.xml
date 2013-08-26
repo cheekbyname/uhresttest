@@ -1,10 +1,57 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ListView xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/tntCommsList"
-    style="@style/AppBaseTheme"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/tntCommsLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:layout_margin="@dimen/grid_spacing"
-    android:animateLayoutChanges="true" >
+    android:orientation="vertical" >
 
-</ListView>
+    <LinearLayout android:id="@+id/tntCommsHeader"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+	    android:background="@color/grid_back"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/tvCommsHeadType"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="@string/tenant_commstype"
+            android:layout_weight="0.25"
+            android:textAppearance="?android:attr/textAppearanceLarge" />
+
+        <TextView
+            android:id="@+id/tvCommsHeadValue"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.25"
+            android:text="@string/tenant_commsvalue"
+            android:textAppearance="?android:attr/textAppearanceLarge" />
+
+        <TextView
+            android:id="@+id/tvCommsHeadDesc"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="@string/tenant_commsdesc"
+            android:layout_weight="0.25"
+            android:textAppearance="?android:attr/textAppearanceLarge" />
+
+        <TextView
+            android:id="@+id/tvCommsHeadName"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="@string/tenant_commsname"
+            android:layout_weight="0.25"
+            android:textAppearance="?android:attr/textAppearanceLarge" />
+        
+    </LinearLayout>
+    
+    <ListView
+        android:id="@id/android:list"
+        style="@style/AppBaseTheme"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:animateLayoutChanges="true" >
+    </ListView>
+
+</LinearLayout>

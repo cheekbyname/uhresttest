@@ -5,7 +5,6 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Handler;
 import android.accounts.Account;
 import android.accounts.AccountManager;
 import android.app.Activity;
@@ -16,10 +15,8 @@ import android.content.Context;
 import android.content.CursorLoader;
 import android.content.Intent;
 import android.content.Loader;
-import android.database.ContentObserver;
 import android.database.Cursor;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -38,6 +35,7 @@ public class HomescreenActivity extends Activity
 	public static final String AUTHORITY = "uk.org.blackwood.uhresttest.contentprovider";
 	public static final String PATH = "uhresttest/Housing/Tenants";
 	public static final String EXTRA_TENANT = "uk.org.blackwood.uhresttest.TENANT";
+	public static final String EXTRA_CON_KEY = "uk.org.blackwood.uhresttest.CON_KEY";
 	// If using an Exchange account
 	public static final String EXCHANGE_ACCOUNT_NAME = "AlexC@mbha.org.uk";
 	public static final String EXCHANGE_ACCOUNT_TYPE = "com.android.exchange";
@@ -67,18 +65,7 @@ public class HomescreenActivity extends Activity
         if (Intent.ACTION_SEARCH.equals(intent.getAction())) {
         	curSearch = intent.getStringExtra(SearchManager.QUERY);
         }
-/*        
-        // Instantiate Observer for Data Syncing of housing_tenants table
-        myResolve = getContentResolver();
-        myUri = new Uri.Builder()
-        	.scheme(SCHEME)
-        	.authority(AUTHORITY)
-        	.path(PATH)
-        	.build();
-        DataObserver watcher = new DataObserver(new Handler());
-        Log.d("HomescreenActivity", "Registering ContentObserver for " + myUri);
-        myResolve.registerContentObserver(myUri, true, watcher);
-*/
+
         // Dummy account for emulator debugging
 		am = AccountManager.get(getApplicationContext());
 		Account newAcct = new Account(ACCOUNT, ACCOUNT_TYPE);
@@ -140,7 +127,7 @@ public class HomescreenActivity extends Activity
         getMenuInflater().inflate(R.menu.homescreen, menu);
         MenuItem searchItem = menu.findItem(R.id.action_search);
 
-        // TODO Configure search, add listeners, etc.
+        // Configure search, add listeners, etc.
         SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
         SearchView searchView = (SearchView) searchItem.getActionView();
         searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
@@ -159,32 +146,14 @@ public class HomescreenActivity extends Activity
     
     @Override
 	public void onItemClick(AdapterView<?> parent, View view, int pos, long id) {
+    	Cursor itemData = (Cursor) parent.getItemAtPosition(pos);
 		Intent intent = new Intent(this, TenantMainActivity.class);
 		intent.putExtra(EXTRA_TENANT, id);
+		intent.putExtra(EXTRA_CON_KEY, itemData.getLong(itemData.getColumnIndex(HousingTenantsTable.COLUMN_HOUSING_TENANTS_CON_KEY)));
 		startActivity(intent);
-		Log.d(parent.toString(), "Item selected from " + view.toString() + ": Item at position " + pos);
 		return;
 	}
-/*
-	// Observer for ContentProvider to trigger redraw
-    public class DataObserver extends ContentObserver {
 
-		public DataObserver(Handler handler) {
-			super(handler);
-		}
-
-		@Override
-		public void onChange(boolean selfChange) {
-			onChange(selfChange, null);
-		}
-		
-		@Override
-		public void onChange (boolean selfChange, Uri changeUri) {
-			Log.d("DataObserver", "I totally observed data.");
-			getLoaderManager().restartLoader(0, null, );
-		}
-    }
-*/  
 	@Override
 	public Loader<Cursor> onCreateLoader(int id, Bundle argBundle) {
 		String selection = null;

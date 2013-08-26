@@ -42,11 +42,12 @@ public class UHRESTTestContentProvider extends ContentProvider {
 	private static final int HOUSING_TENANTS_COMMS_ID = 41;
 	private static final String HOUSING_TENANTS_COMMS_PATH = "housing/tenants/comms";
 
-	// TODO Sort these out, they're wrong?
+	// Content URIs
 	public static final Uri CONTENT_URI = Uri.parse("content://" + AUTHORITY + "/" + BASE_PATH);
-	public static final Uri HOUSING_TENANTS_URI = Uri.parse(CONTENT_URI + HOUSING_TENANTS_PATH);	// Why?
 	public static final String CONTENT_TYPE = ContentResolver.CURSOR_DIR_BASE_TYPE;
 	public static final String CONTENT_ITEM_TYPE = ContentResolver.CURSOR_ITEM_BASE_TYPE;
+	public static final Uri HOUSING_TENANTS_URI = Uri.parse(CONTENT_URI + HOUSING_TENANTS_PATH);
+	public static final Uri HOUSING_TENANTS_COMMS_URI = Uri.parse(CONTENT_URI + HOUSING_TENANTS_COMMS_PATH);
 	
 	private static final UriMatcher myURIMatcher = new UriMatcher(UriMatcher.NO_MATCH);
 	static {
@@ -130,7 +131,7 @@ public class UHRESTTestContentProvider extends ContentProvider {
 		}
 		SQLiteDatabase sqlDB = db.getWritableDatabase();
 		try {
-			long newID = sqlDB.insertOrThrow(HousingTenantsTable.TABLE_HOUSING_TENANTS, null, values);	// TODO Replace with tableName
+			long newID = sqlDB.insertOrThrow(tableName, null, values);
 			if (newID > 0) {
 				Uri newUri = ContentUris.withAppendedId(uri, newID);
 				getContext().getContentResolver().notifyChange(newUri, null);
@@ -165,24 +166,25 @@ public class UHRESTTestContentProvider extends ContentProvider {
 		}
 
 		// Build INSERT statement
-		String [] cNames = values[0].keySet().toArray(new String[0]);
-		String strSQL = "INSERT INTO " + tableName + " (";
+		String [] cNames = values[0].keySet().toArray(new String[0]);	// Pull column names
+		StringBuilder strBuild = new StringBuilder();
+		strBuild.append("INSERT INTO " + tableName + " (");
 		for (int i=0; i<cNames.length; i++) {
-			strSQL = strSQL + cNames[i] + ", ";
+			strBuild.append(cNames[i] + ", ");
 		}
-		strSQL = strSQL.substring(0, strSQL.length()-2);
-		strSQL = strSQL + ") VALUES (";
+		strBuild.delete(strBuild.length()-2, strBuild.length());
+		strBuild.append(") VALUES (");
 		for (int i=0; i<cNames.length; i++) {
-			strSQL = strSQL.concat("?, ");
+			strBuild.append("?, ");
 		}
-		strSQL = strSQL.substring(0, strSQL.length()-2);
-		strSQL = strSQL + ");";
-		
+		strBuild.delete(strBuild.length()-2, strBuild.length());
+		strBuild.append(");");
+
 		// Compile & execute in transaction
 		SQLiteDatabase sqlDB = db.getWritableDatabase();
 		sqlDB.beginTransaction();
-		
-		SQLiteStatement sqlInsert = sqlDB.compileStatement(strSQL);
+		SQLiteStatement sqlInsert = sqlDB.compileStatement(strBuild.toString());
+
 		for (int i=0; i<values.length; i++) {
 			sqlInsert.clearBindings();
 			for (int j=0; j<cNames.length; j++) {
@@ -232,16 +234,18 @@ public class UHRESTTestContentProvider extends ContentProvider {
 		case HOUSING_TENANTS_ID:
 			qBuild.setTables(HousingTenantsTable.TABLE_HOUSING_TENANTS);
 			qBuild.appendWhere(HousingTenantsTable.COLUMN_ID + "=" + uri.getLastPathSegment());
-			// TODO Fallback argBundle parameters
 			break;
 		case HOUSING_TENANTS_COMMS:
 			qBuild.setTables(HousingTenantsCommsTable.TABLE_HOUSING_TENANTS_COMMS);
-			// TODO Fallback argBundle parameters
+			syncSet.putString(SyncAdapt.SYNCADAPT_TABLES, HousingTenantsCommsTable.CONTENT_PATH);
+			syncSet.putString(SyncAdapt.SYNCADAPT_APIS, HousingTenantsCommsTable.API_PATH);
+			syncSet.putInt(SyncAdapt.SYNCADAPT_SCOPES, SyncAdapt.SYNCADAPTSCOPE_KEYED);
+			syncSet.putInt(SyncAdapt.SYNCADAPT_KEYTYPES, SyncAdapt.SYNCADAPTKEYTYPE_INT);
+			syncSet.putString(SyncAdapt.SYNCADAPT_KEYS, selectionArgs[0]);
 			break;
 		case HOUSING_TENANTS_COMMS_ID:
 			qBuild.setTables(HousingTenantsCommsTable.TABLE_HOUSING_TENANTS_COMMS);
 			qBuild.appendWhere(HousingTenantsCommsTable.COLUMN_ID + "=" + uri.getLastPathSegment());
-			// TODO Fallback argBundle parameters
 			break;
 		default:
 			throw new IllegalArgumentException("Unknown Content URI " + uri);
@@ -252,8 +256,8 @@ public class UHRESTTestContentProvider extends ContentProvider {
 
 		Cursor cursor = qBuild.query(sqlDB, projection, selection, selectionArgs, null, null, sortOrder);
 
-		// Request data sync if cursor blank and no search filter (i.e. selection parameters)
-		if (cursor.getCount() == 0 && selection == null) {
+		// Request data sync if cursor blank and no search filter (i.e. selection parameters) on Tenants table
+		if (cursor.getCount() == 0 && (selection == null || (qBuild.getTables() != HousingTenantsTable.TABLE_HOUSING_TENANTS))) {
 			ContentResolver.requestSync(HomescreenActivity.exAcct, HomescreenActivity.AUTHORITY, syncSet);
 		} else {
 			Log.d("ContentProvider.query", "Returned " + cursor.getCount() + " rows from query on URI " + uri.toString());
