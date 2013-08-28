@@ -13,6 +13,7 @@ public class HousingTenantsCommsTable {
 	public static final String COLUMN_SEPARATOR = ", ";
 	public static final String TABLE_HOUSING_TENANTS_COMMS = "housing_tenants_comms";
 	public static final String API_PATH = "/housing/tenants/comms/tenant/";
+	public static final String CONTENT_PATH = "/housing/tenants/comms";
 	
 	// Columns
 	public static final String COLUMN_HOUSING_TENANTS_COMMS_CON_KEY = "con_key";
