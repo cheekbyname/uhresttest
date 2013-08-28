@@ -1,51 +1,49 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/tntCommsLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_margin="@dimen/grid_spacing"
     android:orientation="vertical" >
 
-    <LinearLayout android:id="@+id/tntCommsHeader"
+    <LinearLayout
+        android:id="@+id/tntHouseholdHeader"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-	    android:background="@color/grid_back"
-        android:orientation="horizontal">
+        android:background="@color/grid_back" >
 
         <TextView
-            android:id="@+id/tvCommsHeadType"
+            android:id="@+id/tvHHHeadName"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:text="@string/tenant_commstype"
-            android:layout_weight="0.25"
+            android:layout_weight=".45"
+            android:text="@string/tenant_hh_fullname"
             android:textAppearance="?android:attr/textAppearanceLarge" />
 
         <TextView
-            android:id="@+id/tvCommsHeadValue"
+            android:id="@+id/tvHHHeadRelation"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_weight="0.25"
-            android:text="@string/tenant_commsvalue"
+            android:layout_weight=".25"
+            android:text="@string/tenant_hh_relation"
             android:textAppearance="?android:attr/textAppearanceLarge" />
 
         <TextView
-            android:id="@+id/tvCommsHeadDesc"
+            android:id="@+id/tvHHHeadDob"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:text="@string/tenant_commsdesc"
-            android:layout_weight="0.25"
+            android:layout_weight=".15"
+            android:text="@string/tenant_hh_dob"
             android:textAppearance="?android:attr/textAppearanceLarge" />
 
         <TextView
-            android:id="@+id/tvCommsHeadName"
+            android:id="@+id/tvHHHeadNino"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:text="@string/tenant_commsname"
-            android:layout_weight="0.25"
+            android:layout_weight=".15"
+            android:text="@string/tenant_hh_nino"
             android:textAppearance="?android:attr/textAppearanceLarge" />
-        
+
     </LinearLayout>
-    
+
     <ListView
         android:id="@id/android:list"
         style="@style/AppBaseTheme"

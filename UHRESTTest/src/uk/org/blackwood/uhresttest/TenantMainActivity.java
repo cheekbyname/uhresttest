@@ -2,7 +2,7 @@ package uk.org.blackwood.uhresttest;
 
 import java.util.ArrayList;
 
-import uk.org.blackwood.uhresttest.TenantBasicFragment.TenantHandler;
+import uk.org.blackwood.uhresttest.TenantHandler;
 
 import android.app.ActionBar;
 import android.app.ActionBar.Tab;
@@ -15,20 +15,31 @@ import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v4.app.Fragment;
 
-public class TenantMainActivity extends FragmentActivity implements TenantHandler {
+public class TenantMainActivity
+	extends FragmentActivity
+	implements TenantHandler {
 	
 	public static final String EXTRA_TENANT = "uk.org.blackwood.uhresttest.TENANT";
+	public static final String EXTRA_CON_KEY = "uk.org.blackwood.uhresttest.CON_KEY";
+	public static final String EXTRA_HOUSE_REF = "uk.org.blackwood.uhresttest.HOUSE_REF";
+	public static final String EXTRA_PROP_REF = "uk.org.blackwood.uhresttest.PROP_REF";
 	ViewPager mViewPager;
 	TabAdapter mTabAdapt;
 	private long tenant_id;
+	private long tenant_con_key;
+	private String tenant_house_ref;
+	private String tenant_prop_ref;
 
 	@Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         
-		// Extract Tenant passed in Intent
+		// Extract parameters passed in Intent
 		Intent intent = getIntent();
 		setTenant_id(intent.getLongExtra(EXTRA_TENANT, 0));
+		setTenant_con_key(intent.getLongExtra(EXTRA_CON_KEY, 0));
+		setTenant_house_ref(intent.getStringExtra(EXTRA_HOUSE_REF));
+		setTenant_prop_ref(intent.getStringExtra(EXTRA_PROP_REF));
 		
 		// Setup Views
 		mViewPager = new ViewPager(this);
@@ -44,6 +55,8 @@ public class TenantMainActivity extends FragmentActivity implements TenantHandle
         mTabAdapt = new TabAdapter(this, mViewPager);
         mTabAdapt.addTab(acBar.newTab().setText(R.string.tenant_main_activity_title), TenantBasicFragment.class, null);
         mTabAdapt.addTab(acBar.newTab().setText(R.string.tenant_comms_activity_title), TenantCommsFragment.class, null);
+        mTabAdapt.addTab(acBar.newTab().setText(R.string.tenant_household_activity_title), TenantHouseholdFragment.class, null);
+        mTabAdapt.addTab(acBar.newTab().setText(R.string.tenant_repairs_activity_title), TenantRepairsFragment.class, null);
         
         if (savedInstanceState != null) {
         	acBar.setSelectedNavigationItem(savedInstanceState.getInt("tab", 0));
@@ -55,7 +68,9 @@ public class TenantMainActivity extends FragmentActivity implements TenantHandle
 		super.onSaveInstanceState(outState);
 		outState.putInt("tab", getActionBar().getSelectedNavigationIndex());
 	}
-	
+
+	// TenantHandler Interface methods
+	@Override
 	public long getTenant_id() {
 		return tenant_id;
 	}
@@ -64,6 +79,34 @@ public class TenantMainActivity extends FragmentActivity implements TenantHandle
 		this.tenant_id = tenant_id;
 	}
 
+	@Override
+	public long getTenant_con_key() {
+		return tenant_con_key;
+	}
+	
+	public void setTenant_con_key(long tntConKey) {
+		this.tenant_con_key = tntConKey;
+	}
+
+	@Override
+	public String getTenant_house_ref() {
+		return tenant_house_ref;
+	}
+	
+	public void setTenant_house_ref(String tntHouseRef) {
+		this.tenant_house_ref = tntHouseRef;
+	}
+	
+	@Override
+	public String getTenant_prop_ref() {
+		return tenant_prop_ref;
+	}
+	
+	public void setTenant_prop_ref(String tntPropRef) {
+		this.tenant_prop_ref = tntPropRef;
+	}
+	
+	// Custom FragmentPager
 	public static class TabAdapter
 		extends FragmentPagerAdapter
 		implements ActionBar.TabListener, ViewPager.OnPageChangeListener {
@@ -150,5 +193,5 @@ public class TenantMainActivity extends FragmentActivity implements TenantHandle
 		}
 		
 	}
-	
+
 }

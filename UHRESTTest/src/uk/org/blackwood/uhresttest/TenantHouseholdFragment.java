@@ -1,3 +1,6 @@
+/** 
+ *	Fragment for displaying household information
+ */
 package uk.org.blackwood.uhresttest;
 
 import uk.org.blackwood.uhresttest.contentprovider.UHRESTTestContentProvider;
@@ -12,7 +15,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.database.Cursor;
 
-public class TenantCommsFragment
+
+public class TenantHouseholdFragment
 	extends ListFragment
 	implements LoaderManager.LoaderCallbacks<Cursor> {
 
@@ -23,50 +27,54 @@ public class TenantCommsFragment
 		// Plug in data
     	cAdapt = new SimpleCursorAdapter(
     			this.getActivity(),											// Context
-    			R.layout.list_comms,										// Layout ID
+    			R.layout.list_household,									// Layout ID
     			null,														// Existing cursor
     			new String[]												// Cursor projection columns 
-    				{HousingTenantsCommsTable.COLUMN_HOUSING_TENANTS_COMMS_COMMS_TYPE,
-    				 HousingTenantsCommsTable.COLUMN_HOUSING_TENANTS_COMMS_COMMS_VALUE,
-    				 HousingTenantsCommsTable.COLUMN_HOUSING_TENANTS_COMMS_COMMS_DESC,
-    				 HousingTenantsCommsTable.COLUMN_HOUSING_TENANTS_COMMS_COMMS_NAME},
+    				{HousingTenantsHouseholdTable.COLUMN_HOUSING_TENANTS_HOUSEHOLD_TITLE,
+    				 HousingTenantsHouseholdTable.COLUMN_HOUSING_TENANTS_HOUSEHOLD_FORENAME,
+    				 HousingTenantsHouseholdTable.COLUMN_HOUSING_TENANTS_HOUSEHOLD_SURNAME,
+    				 HousingTenantsHouseholdTable.COLUMN_HOUSING_TENANTS_HOUSEHOLD_RELATIONSHIP,
+    				 HousingTenantsHouseholdTable.COLUMN_HOUSING_TENANTS_HOUSEHOLD_DOB,
+    				 HousingTenantsHouseholdTable.COLUMN_HOUSING_TENANTS_HOUSEHOLD_NI_NO},
     			new int[]													// Column view mapping IDs
-    				{R.id.tvCommsType,
-    				 R.id.tvCommsValue,
-    				 R.id.tvCommsDesc,
-    				 R.id.tvCommsName},
+    				{R.id.tvHHtitle,
+    				 R.id.tvHHforename,
+    				 R.id.tvHHsurname,
+    				 R.id.tvHHRelation,
+    				 R.id.tvHHDob,
+    				 R.id.tvHHNino},
     			0);															// Flags
     	setListAdapter(cAdapt);
-    	return inflater.inflate(R.layout.tenant_comms_frag, container, false);
+    	return inflater.inflate(R.layout.tenant_household_frag, container, false);
 	}
-	
+
 	@Override
 	public void onActivityCreated(Bundle savedInstanceState) {
 		super.onActivityCreated(savedInstanceState);
 		Bundle argBundle = new Bundle();
-		argBundle.putLong("tenant_con_key", ((TenantHandler) getActivity()).getTenant_con_key());
+		argBundle.putString("tenant_house_ref", ((TenantHandler) getActivity()).getTenant_house_ref());
 		getLoaderManager().initLoader(1, argBundle, this);
 	}
 
 	@Override
 	public Loader<Cursor> onCreateLoader(int id, Bundle argBundle) {
-		long selectId = 0;
+		String selectRef = "";
 		String selection = null;
 		String[] selectArgs = null;
 		if (argBundle != null) {
-			selectId = argBundle.getLong("tenant_con_key");
-			selection = HousingTenantsCommsTable.COLUMN_HOUSING_TENANTS_COMMS_CON_KEY+ " = ?";
-			selectArgs = new String[] {String.valueOf(selectId)};
+			selectRef = argBundle.getString("tenant_house_ref");
+			selection = HousingTenantsHouseholdTable.COLUMN_HOUSING_TENANTS_HOUSEHOLD_HOUSE_REF + " = ?";
+			selectArgs = new String[] {selectRef};
 		} else {
 			return null;
 		}
 		CursorLoader mcLoader = new CursorLoader(
-				getActivity(),													// Context
-				UHRESTTestContentProvider.HOUSING_TENANTS_COMMS_URI,			// URI
-				HousingTenantsCommsTable.PROJECTION_HOUSING_TENANTS_COMMS_ALL,	// Projection
-				selection,														// Selection
-				selectArgs,														// Selection Args
-				null);															// Sort Order
+				getActivity(),																// Context
+				UHRESTTestContentProvider.HOUSING_TENANTS_HOUSEHOLD_URI,					// URI
+				HousingTenantsHouseholdTable.PROJECTION_HOUSING_TENANTS_HOUSEHOLD_SUMMARY,	// Projection
+				selection,																	// Selection
+				selectArgs,																	// Selection Args
+				null);																		// Sort Order
 			return mcLoader;
 	}
 

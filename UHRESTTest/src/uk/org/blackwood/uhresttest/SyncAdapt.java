@@ -133,6 +133,7 @@ public class SyncAdapt extends AbstractThreadedSyncAdapter {
 		InputStream isReturn = null;
 		String strContent = null;
 		JSONArray jsRes = null;
+// TODO Trap no network
 		try {
 			// Connection
 			URL url = new URL(strUrl);
@@ -146,8 +147,10 @@ public class SyncAdapt extends AbstractThreadedSyncAdapter {
 			strContent = readStream(isReturn);
 		} catch (MalformedURLException e) {
 			e.printStackTrace();
+			return null;
 		} catch (IOException e) {
 			e.printStackTrace();
+			return null;
 		} finally {
 			if (isReturn != null) {
 				isReturn.close();
