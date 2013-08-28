@@ -6,6 +6,7 @@
     <string name="action_settings">Settings</string>
     <string name="action_search">Search</string>
     <string name="action_filter">Filter</string>
+	<string name="search_hint">Search tenants and properties</string>
     <string name="hello_world">Welcome to the Blackwood Business Solutions UH REST API test suite</string>
 	<string name="con_status_label">Connection Status:</string>
 	<string name="con_status">Preparing&#8230;</string>
@@ -19,11 +20,13 @@
 	    <item>http://192.168.121.176:3000/housing/tenants/scheme/ABBCTEH</item>
 	    <item>http://192.168.121.176:3000/housing/tenants/officer/AD2</item>
 	</string-array>
-	<string name="tenant_main_activity_title">Tenant Details</string>
-	<string name="tenant_comms_activity_title">Comms Preferences</string>
-	<string name="search_hint">Search tenants and properties</string>
 	
 	<!-- Field labels for tenant information activities -->
+	<string name="tenant_main_activity_title">Tenant Details</string>
+	<string name="tenant_comms_activity_title">Comms Preferences</string>
+	<string name="tenant_household_activity_title">Household</string>
+	<string name="tenant_repairs_activity_title">Repairs Requests</string>
+	<string name="tenant_rent_activity_title">Rent</string>
 	<!--  Tenant Basic Fragment -->
 	<string name="tenant_title">Title</string>
 	<string name="tenant_forename">Forename</string>
@@ -43,5 +46,20 @@
 	<string name="tenant_commsvalue">Value</string>
 	<string name="tenant_commsdesc">Description</string>
 	<string name="tenant_commsname">Name</string>
+	<!-- Tenant Household Fragment -->
+	<string name="tenant_hh_fullname">Name</string>
+	<string name="tenant_hh_title">Title</string>
+	<string name="tenant_hh_forename">Forename</string>
+	<string name="tenant_hh_surname">Surname</string>
+	<string name="tenant_hh_relation">Relationship</string>
+	<string name="tenant_hh_dob">Date of Birth</string>
+	<string name="tenant_hh_nino">National Insurance Number</string>
+	<!-- Tenant Repairs Fragment -->
+	<string name="tenant_repairs_rq_date">Date Requested</string>
+	<string name="tenant_repairs_rq_name">Person Requesting</string>
+	<string name="tenant_repairs_rq_problem">Description of Problem</string>
+	<string name="tenant_repairs_rq_status">Current Status</string>
+	<string name="tenant_repairs_rq_status_date">Date of Status</string>
+	<string name="tenant_repairs_rq_due_date">Date Due</string>
 
 </resources>

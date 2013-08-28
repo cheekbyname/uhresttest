@@ -36,6 +36,8 @@ public class HomescreenActivity extends Activity
 	public static final String PATH = "uhresttest/Housing/Tenants";
 	public static final String EXTRA_TENANT = "uk.org.blackwood.uhresttest.TENANT";
 	public static final String EXTRA_CON_KEY = "uk.org.blackwood.uhresttest.CON_KEY";
+	public static final String EXTRA_HOUSE_REF = "uk.org.blackwood.uhresttest.HOUSE_REF";
+	public static final String EXTRA_PROP_REF = "uk.org.blackwood.uhresttest.PROP_REF";
 	// If using an Exchange account
 	public static final String EXCHANGE_ACCOUNT_NAME = "AlexC@mbha.org.uk";
 	public static final String EXCHANGE_ACCOUNT_TYPE = "com.android.exchange";
@@ -150,6 +152,8 @@ public class HomescreenActivity extends Activity
 		Intent intent = new Intent(this, TenantMainActivity.class);
 		intent.putExtra(EXTRA_TENANT, id);
 		intent.putExtra(EXTRA_CON_KEY, itemData.getLong(itemData.getColumnIndex(HousingTenantsTable.COLUMN_HOUSING_TENANTS_CON_KEY)));
+		intent.putExtra(EXTRA_HOUSE_REF, itemData.getString(itemData.getColumnIndex(HousingTenantsTable.COLUMN_HOUSING_TENANTS_HOUSE_REF)));
+		intent.putExtra(EXTRA_PROP_REF, itemData.getString(itemData.getColumnIndex(HousingTenantsTable.COLUMN_HOUSING_TENANTS_PROP_REF)));
 		startActivity(intent);
 		return;
 	}

@@ -4,6 +4,7 @@ import uk.org.blackwood.uhresttest.HomescreenActivity;
 import uk.org.blackwood.uhresttest.HousingOfficersTable;
 import uk.org.blackwood.uhresttest.HousingSchemesTable;
 import uk.org.blackwood.uhresttest.HousingTenantsCommsTable;
+import uk.org.blackwood.uhresttest.HousingTenantsHouseholdTable;
 import uk.org.blackwood.uhresttest.HousingTenantsTable;
 import uk.org.blackwood.uhresttest.SyncAdapt;
 import uk.org.blackwood.uhresttest.UHRESTTestHelper;
@@ -41,6 +42,9 @@ public class UHRESTTestContentProvider extends ContentProvider {
 	private static final int HOUSING_TENANTS_COMMS = 40;
 	private static final int HOUSING_TENANTS_COMMS_ID = 41;
 	private static final String HOUSING_TENANTS_COMMS_PATH = "housing/tenants/comms";
+	private static final int HOUSING_TENANTS_HOUSEHOLD = 50;
+	private static final int HOUSING_TENANTS_HOUSEHOLD_ID = 51;
+	private static final String HOUSING_TENANTS_HOUSEHOLD_PATH = "housing/tenants/household";
 
 	// Content URIs
 	public static final Uri CONTENT_URI = Uri.parse("content://" + AUTHORITY + "/" + BASE_PATH);
@@ -48,6 +52,7 @@ public class UHRESTTestContentProvider extends ContentProvider {
 	public static final String CONTENT_ITEM_TYPE = ContentResolver.CURSOR_ITEM_BASE_TYPE;
 	public static final Uri HOUSING_TENANTS_URI = Uri.parse(CONTENT_URI + HOUSING_TENANTS_PATH);
 	public static final Uri HOUSING_TENANTS_COMMS_URI = Uri.parse(CONTENT_URI + HOUSING_TENANTS_COMMS_PATH);
+	public static final Uri HOUSING_TENANTS_HOUSEHOLD_URI = Uri.parse(CONTENT_URI + HOUSING_TENANTS_HOUSEHOLD_PATH);
 	
 	private static final UriMatcher myURIMatcher = new UriMatcher(UriMatcher.NO_MATCH);
 	static {
@@ -59,6 +64,8 @@ public class UHRESTTestContentProvider extends ContentProvider {
 		myURIMatcher.addURI(AUTHORITY, BASE_PATH + HOUSING_TENANTS_PATH + "/#", HOUSING_TENANTS_ID);
 		myURIMatcher.addURI(AUTHORITY, BASE_PATH + HOUSING_TENANTS_COMMS_PATH, HOUSING_TENANTS_COMMS);
 		myURIMatcher.addURI(AUTHORITY, BASE_PATH + HOUSING_TENANTS_COMMS_PATH + "/#", HOUSING_TENANTS_COMMS_ID);
+		myURIMatcher.addURI(AUTHORITY, BASE_PATH + HOUSING_TENANTS_HOUSEHOLD_PATH, HOUSING_TENANTS_HOUSEHOLD);
+		myURIMatcher.addURI(AUTHORITY, BASE_PATH + HOUSING_TENANTS_HOUSEHOLD_PATH + "/#", HOUSING_TENANTS_HOUSEHOLD_ID);
 	}
 	
 	@Override
@@ -103,6 +110,10 @@ public class UHRESTTestContentProvider extends ContentProvider {
 			return CONTENT_TYPE;
 		case HOUSING_TENANTS_COMMS_ID:
 			return CONTENT_ITEM_TYPE;
+		case HOUSING_TENANTS_HOUSEHOLD:
+			return CONTENT_TYPE;
+		case HOUSING_TENANTS_HOUSEHOLD_ID:
+			return CONTENT_ITEM_TYPE;
 		default:
 			throw new IllegalArgumentException("Invalid URI for operation: " + uri.toString());
 		}
@@ -112,7 +123,6 @@ public class UHRESTTestContentProvider extends ContentProvider {
 	public Uri insert(Uri uri, ContentValues values) {
 		String tableName;
 		int contentUri = myURIMatcher.match(uri);
-//		Log.d("ContentProvider", "Attempting insert for " + String.valueOf(contentUri) + ":" + uri.toString());
 		switch (contentUri) {
 		case HOUSING_TENANTS:
 			tableName = HousingTenantsTable.TABLE_HOUSING_TENANTS;
@@ -125,6 +135,9 @@ public class UHRESTTestContentProvider extends ContentProvider {
 			break;
 		case HOUSING_SCHEMES:
 			tableName = HousingSchemesTable.TABLE_HOUSING_SCHEMES;
+			break;
+		case HOUSING_TENANTS_HOUSEHOLD:
+			tableName = HousingTenantsHouseholdTable.TABLE_HOUSING_TENANTS_HOUSEHOLD;
 			break;
 		default :
 			throw new IllegalArgumentException("Invalid URI for insert operation: " + uri.toString());
@@ -160,6 +173,9 @@ public class UHRESTTestContentProvider extends ContentProvider {
 			break;
 		case HOUSING_SCHEMES:
 			tableName = HousingSchemesTable.TABLE_HOUSING_SCHEMES;
+			break;
+		case HOUSING_TENANTS_HOUSEHOLD:
+			tableName = HousingTenantsHouseholdTable.TABLE_HOUSING_TENANTS_HOUSEHOLD;
 			break;
 		default :
 			throw new IllegalArgumentException("Invalid URI for insert operation: " + uri.toString());
@@ -224,7 +240,6 @@ public class UHRESTTestContentProvider extends ContentProvider {
 		switch (contentUri) {
 		case HOUSING_TENANTS:
 			qBuild.setTables(HousingTenantsTable.TABLE_HOUSING_TENANTS);
-			// Fallback argBundle parameters
 			syncSet.putString(SyncAdapt.SYNCADAPT_TABLES, HousingTenantsTable.CONTENT_PATH);
 			syncSet.putString(SyncAdapt.SYNCADAPT_APIS, HousingTenantsTable.API_PATH);
 			syncSet.putInt(SyncAdapt.SYNCADAPT_SCOPES, SyncAdapt.SYNCADAPTSCOPE_KEYED);
@@ -246,6 +261,14 @@ public class UHRESTTestContentProvider extends ContentProvider {
 		case HOUSING_TENANTS_COMMS_ID:
 			qBuild.setTables(HousingTenantsCommsTable.TABLE_HOUSING_TENANTS_COMMS);
 			qBuild.appendWhere(HousingTenantsCommsTable.COLUMN_ID + "=" + uri.getLastPathSegment());
+			break;
+		case HOUSING_TENANTS_HOUSEHOLD:
+			qBuild.setTables(HousingTenantsHouseholdTable.TABLE_HOUSING_TENANTS_HOUSEHOLD);
+			syncSet.putString(SyncAdapt.SYNCADAPT_TABLES, HousingTenantsHouseholdTable.CONTENT_PATH);
+			syncSet.putString(SyncAdapt.SYNCADAPT_APIS, HousingTenantsHouseholdTable.API_PATH);
+			syncSet.putInt(SyncAdapt.SYNCADAPT_SCOPES, SyncAdapt.SYNCADAPTSCOPE_KEYED);
+			syncSet.putInt(SyncAdapt.SYNCADAPT_KEYTYPES, SyncAdapt.SYNCADAPTKEYTYPE_STRING);
+			syncSet.putString(SyncAdapt.SYNCADAPT_KEYS, selectionArgs[0]);
 			break;
 		default:
 			throw new IllegalArgumentException("Unknown Content URI " + uri);

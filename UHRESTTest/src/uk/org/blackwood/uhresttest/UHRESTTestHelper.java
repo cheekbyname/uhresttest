@@ -21,6 +21,7 @@ public class UHRESTTestHelper extends SQLiteOpenHelper {
 		HousingOfficersTable.onCreate(db);
 		HousingTenantsTable.onCreate(db);
 		HousingTenantsCommsTable.onCreate(db);
+		HousingTenantsHouseholdTable.onCreate(db);
 	}
 
 	@Override
@@ -30,5 +31,6 @@ public class UHRESTTestHelper extends SQLiteOpenHelper {
 		HousingOfficersTable.onUpgrade(db, oldVer, newVer);
 		HousingTenantsTable.onUpgrade(db, oldVer, newVer);
 		HousingTenantsCommsTable.onUpgrade(db, oldVer, newVer);
+		HousingTenantsHouseholdTable.onUpgrade(db, oldVer, newVer);
 	}
 }

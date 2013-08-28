@@ -23,6 +23,7 @@
             android:layout_height="wrap_content"
             android:hint="@string/tenant_title"
             android:inputType="textCapWords" >
+
         </EditText>
     </TableRow>
 
@@ -85,8 +86,6 @@
             android:ems="10"
             android:hint="@string/tenant_dob"
             android:inputType="date" >
-
-            <requestFocus />
 
         </EditText>
 

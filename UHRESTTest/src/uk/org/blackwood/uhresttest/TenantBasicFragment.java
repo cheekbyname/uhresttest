@@ -11,6 +11,7 @@ import android.support.v4.content.Loader;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.EditText;
 import android.database.Cursor;
 import android.database.CursorIndexOutOfBoundsException;
@@ -49,6 +50,7 @@ public class TenantBasicFragment
     				 R.id.edHouseRef},
     			0);															// Flags
     	cAdapt.setViewBinder(this);
+    	getActivity().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
     	return inflater.inflate(R.layout.tenant_basic_frag, container, false);
 	}
 

@@ -147,9 +147,10 @@ public class SyncAdapt extends AbstractThreadedSyncAdapter {
 			strContent = readStream(isReturn);
 		} catch (MalformedURLException e) {
 			e.printStackTrace();
+			return null;
 		} catch (IOException e) {
 			e.printStackTrace();
-// TODO Trap connection timeouts
+			return null;
 		} finally {
 			if (isReturn != null) {
 				isReturn.close();
